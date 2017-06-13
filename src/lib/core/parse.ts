@@ -243,11 +243,11 @@ const word = function word(): boolean | null | void {
 
 // const value;  // Place holder for the value function.
 
-const array = function (): string[] | void {
+const array = function (): any[] | void {
 
     // Parse an array value.
 
-    var array = [];
+    var array: any[] = [];
 
     if (ch === '[') {
         next('[');

@@ -98,6 +98,7 @@ var next = function next(c) {
     // return the empty string.
     ch = text.charAt(at);
     at += 1;
+    return ch;
 };
 var number = function number() {
     // Parse a number value.
@@ -119,8 +120,7 @@ var number = function number() {
     }
     if (ch === 'e' || ch === 'E') {
         string += ch;
-        next();
-        ch = ch;
+        ch = next();
         if (ch === '-' || ch === '+') {
             string += ch;
             next();
@@ -150,12 +150,11 @@ var string = function () {
                 return string;
             }
             else if (ch === '\\') {
-                next();
-                ch = ch;
+                ch = next();
                 if (ch === 'u') {
                     uffff = 0;
                     for (i = 0; i < 4; i += 1) {
-                        next();
+                        ch = next();
                         hex = parseInt(ch, 16);
                         if (!isFinite(hex)) {
                             break;

@@ -31,7 +31,7 @@
   ],
   "scripts": {
     "info": "npm-scripts-info",
-    "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json && yarn build:browser",
+    "build": "trash build && tsc -p tsconfig.main.json && tsc -p tsconfig.module.json && yarn build:browser",
     "build:browser": "rollup --config rollup.config.js --format umd --name 'EIGHT' --output build/browser/index.js && sorcery -i build/browser/index.js",
     "lint": "tslint src/**/*.ts",
     "unit": "trash test && tsc -p tsconfig.json && karma start",

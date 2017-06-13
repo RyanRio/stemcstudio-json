@@ -100,7 +100,6 @@ var next = function next(c) {
     // return the empty string.
     ch = text.charAt(at);
     at += 1;
-    return ch;
 };
 var number = function number() {
     // Parse a number value.
@@ -122,7 +121,8 @@ var number = function number() {
     }
     if (ch === 'e' || ch === 'E') {
         string += ch;
-        ch = next();
+        next();
+        ch = ch;
         if (ch === '-' || ch === '+') {
             string += ch;
             next();
@@ -133,6 +133,7 @@ var number = function number() {
         }
     }
     n = +string;
+    // return issue happening here
     if (isNaN(n)) {
         error("Bad number");
     }
@@ -151,11 +152,13 @@ var string = function () {
                 return string;
             }
             else if (ch === '\\') {
-                ch = next();
+                next();
+                ch = ch;
                 if (ch === 'u') {
                     uffff = 0;
                     for (i = 0; i < 4; i += 1) {
-                        hex = parseInt(next(), 16);
+                        next();
+                        hex = parseInt(ch, 16);
                         if (!isFinite(hex)) {
                             break;
                         }
@@ -180,7 +183,7 @@ var string = function () {
 var white = function skipWhitespace() {
     // Skip whitespace.
     while (ch && ch <= ' ') {
-        ch = next();
+        next();
     }
 };
 var word = function word() {
@@ -213,7 +216,8 @@ var array = function () {
     // Parse an array value.
     var array = [];
     if (ch === '[') {
-        ch = next('[');
+        next('[');
+        ch = ch;
         white();
         if (ch === ']') {
             next(']');
@@ -236,7 +240,8 @@ var object = function () {
     // Parse an object value.
     var key, object = {};
     if (ch === '{') {
-        ch = next('{');
+        next('{');
+        ch = ch;
         white();
         if (ch === '}') {
             next('}');

@@ -99,7 +99,7 @@ const error = function error(m: string): never {
  * Returns the character at the current position and advances the current position.
  * @param c The character that is expected to be the current character. May be omitted.
  */
-const next = function next(c?: string): string | never {
+const next = function next(c?: string): string {
 
     // If a c parameter is provided, verify that it matches the current character.
 
@@ -115,7 +115,7 @@ const next = function next(c?: string): string | never {
     return ch;
 };
 
-const number = function number(): any {
+const number = function number(): number | void {
 
     // Parse a number value.
 
@@ -149,6 +149,7 @@ const number = function number(): any {
         }
     }
     n = +string;
+    // return issue happening here
     if (isNaN(n)) {
         error("Bad number");
     }
@@ -157,7 +158,7 @@ const number = function number(): any {
     }
 };
 
-const string = function (): any {
+const string = function (): string | void {
 
     // Parse a string value.
 
@@ -179,7 +180,8 @@ const string = function (): any {
                 if (ch === 'u') {
                     uffff = 0;
                     for (i = 0; i < 4; i += 1) {
-                        hex = parseInt(next(), 16);
+                        ch = next();
+                        hex = parseInt(ch, 16);
                         if (!isFinite(hex)) {
                             break;
                         }
@@ -207,11 +209,11 @@ const white = function skipWhitespace() {
     // Skip whitespace.
 
     while (ch && ch <= ' ') {
-        ch = next();
+        next();
     }
 };
 
-const word = function word(): any {
+const word = function word(): boolean | null | void {
 
     // true, false, or null.
 
@@ -241,14 +243,15 @@ const word = function word(): any {
 
 // const value;  // Place holder for the value function.
 
-const array = function (): any {
+const array = function (): string[] | void {
 
     // Parse an array value.
 
     var array = [];
 
     if (ch === '[') {
-        ch = next('[');
+        next('[');
+        ch = ch;
         white();
         if (ch === ']') {
             next(']');
@@ -268,7 +271,7 @@ const array = function (): any {
     error("Bad array");
 };
 
-const object = function (): any {
+const object = function (): object | void {
 
     // Parse an object value.
 
@@ -276,7 +279,8 @@ const object = function (): any {
         object = {};
 
     if (ch === '{') {
-        ch = next('{');
+        next('{');
+        ch = ch;
         white();
         if (ch === '}') {
             next('}');
@@ -303,7 +307,8 @@ const object = function (): any {
     error("Bad object");
 };
 
-const value = function value() {
+
+const value = function value(): void | object | string[] | number | string | boolean {
 
     // Parse a JSON value. It could be an object, an array, a string, a number,
     // or a word.
@@ -326,7 +331,7 @@ const value = function value() {
 // Return the json_parse function. It will have access to all of the above
 // functions and variables.
 
-export function parse(source: string, reviver?) {
+export function parse(source: string, reviver?): string | object {
     var result;
 
     text = source;

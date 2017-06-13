@@ -1,1 +1,1 @@
-export declare function parse(source: string, reviver?: any): any;
+export declare function parse(source: string, reviver?: any): string | object;
